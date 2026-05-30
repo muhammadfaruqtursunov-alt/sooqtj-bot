@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #F5F5F5;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0A0A0A;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* ── Brand gold gradient ── */
+.gold {
+  background: linear-gradient(135deg, #F5C518 0%, #FF9C00 100%);
+}
+.gold-text {
+  background: linear-gradient(135deg, #F5C518, #FF9C00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glass panel ── */
+.glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Thin gold scrollbar ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #F5C518; border-radius: 99px; }
+
+/* ── Input reset ── */
+input, textarea {
+  outline: none;
+  -webkit-appearance: none;
+}
+button { -webkit-tap-highlight-color: transparent; }
+
+/* ── No scrollbar utility ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

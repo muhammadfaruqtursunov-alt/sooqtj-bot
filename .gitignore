@@ -1,0 +1,9 @@
+node_modules/
+mini-app/node_modules/
+.env
+*.local
+__pycache__/
+*.pyc
+uploads/
+sooq-*.json
+SOOQ_CONTEXT.md
