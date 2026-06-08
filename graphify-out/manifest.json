@@ -1,0 +1,267 @@
+{
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\api.py": {
+    "mtime": 1780386099.1680417,
+    "ast_hash": "9e3a29564cc6710293ad9fcc9d5afaa8",
+    "semantic_hash": "9e3a29564cc6710293ad9fcc9d5afaa8"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\auth.py": {
+    "mtime": 1779800672.4135115,
+    "ast_hash": "0ef9164275ce5d68c8c2756dd67252a8",
+    "semantic_hash": "0ef9164275ce5d68c8c2756dd67252a8"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\bot.py": {
+    "mtime": 1780247758.1314654,
+    "ast_hash": "c1fc171e383a0301ff2a9c4815fdf1b3",
+    "semantic_hash": "c1fc171e383a0301ff2a9c4815fdf1b3"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\db.py": {
+    "mtime": 1780166709.1505098,
+    "ast_hash": "08e0e6f987c0f25f3e2abbb64a98e295",
+    "semantic_hash": "08e0e6f987c0f25f3e2abbb64a98e295"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\package.json": {
+    "mtime": 1779324058.8515413,
+    "ast_hash": "2249c62f99ce15bf6cc1df539d89ed4f",
+    "semantic_hash": "2249c62f99ce15bf6cc1df539d89ed4f"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\postcss.config.js": {
+    "mtime": 1779190147.6496713,
+    "ast_hash": "5b84f4567208c7c747079c0477373231",
+    "semantic_hash": "5b84f4567208c7c747079c0477373231"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\App.jsx": {
+    "mtime": 1780387624.2750711,
+    "ast_hash": "34455d264d8adb045ecd4ec19a18c250",
+    "semantic_hash": "34455d264d8adb045ecd4ec19a18c250"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\api.js": {
+    "mtime": 1780387563.365687,
+    "ast_hash": "3600d8525035602e7f2124f1178ccd28",
+    "semantic_hash": "3600d8525035602e7f2124f1178ccd28"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\categoryInference.js": {
+    "mtime": 1779804162.6816163,
+    "ast_hash": "55d65021feac7f993c417f5bbd4cd221",
+    "semantic_hash": "55d65021feac7f993c417f5bbd4cd221"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\BroadcastPanel.jsx": {
+    "mtime": 1780071922.2401004,
+    "ast_hash": "f5c47b160f7ae636d4400d171e01ed2d",
+    "semantic_hash": "f5c47b160f7ae636d4400d171e01ed2d"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\DoughnutChart.jsx": {
+    "mtime": 1780166783.9582505,
+    "ast_hash": "72e6b54b623a9e98390fe908be99822f",
+    "semantic_hash": "72e6b54b623a9e98390fe908be99822f"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\GlassToggle.jsx": {
+    "mtime": 1779324084.5184152,
+    "ast_hash": "f172c494d54f83909e665d983d4c8a5c",
+    "semantic_hash": "f172c494d54f83909e665d983d4c8a5c"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\OrderCard.jsx": {
+    "mtime": 1780166129.7315135,
+    "ast_hash": "55e4825007ed43b4b62af87e4e22ba6a",
+    "semantic_hash": "55e4825007ed43b4b62af87e4e22ba6a"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\PhotoUpload.jsx": {
+    "mtime": 1779190147.6576731,
+    "ast_hash": "28c1043160ed5b055539f8e112c63206",
+    "semantic_hash": "28c1043160ed5b055539f8e112c63206"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\PriceBlock.jsx": {
+    "mtime": 1780166828.6717234,
+    "ast_hash": "61adbe5784332d69b9f4609cfc9e85ed",
+    "semantic_hash": "61adbe5784332d69b9f4609cfc9e85ed"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\ProductCard.jsx": {
+    "mtime": 1780323988.3898716,
+    "ast_hash": "2d168fcd18df6bda5ca20fb869340181",
+    "semantic_hash": "2d168fcd18df6bda5ca20fb869340181"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\ProductForm.jsx": {
+    "mtime": 1780386133.8248217,
+    "ast_hash": "ee30b30b23e27124c341040b0c1f0c79",
+    "semantic_hash": "ee30b30b23e27124c341040b0c1f0c79"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\RegistrationModal.jsx": {
+    "mtime": 1779325685.7677803,
+    "ast_hash": "1f97a8c40be189ff156ecf92438d99ef",
+    "semantic_hash": "1f97a8c40be189ff156ecf92438d99ef"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\StatusBadge.jsx": {
+    "mtime": 1779324118.5193908,
+    "ast_hash": "434aa98e6e9717a7420246597502ad81",
+    "semantic_hash": "434aa98e6e9717a7420246597502ad81"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\ThemeIcon.jsx": {
+    "mtime": 1779320699.2156696,
+    "ast_hash": "ef9d436705a7b47fd05c3ec8a3a08c15",
+    "semantic_hash": "ef9d436705a7b47fd05c3ec8a3a08c15"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\config.js": {
+    "mtime": 1780056371.6754198,
+    "ast_hash": "0caba6fb9749893f6402c53667087f5c",
+    "semantic_hash": "0caba6fb9749893f6402c53667087f5c"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\costCalculation.js": {
+    "mtime": 1780386032.6201837,
+    "ast_hash": "7ad5443877bde9b488617e4e3569ce41",
+    "semantic_hash": "7ad5443877bde9b488617e4e3569ce41"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\main.jsx": {
+    "mtime": 1779190147.664684,
+    "ast_hash": "d3f37e11778a47b718bc98aa31077c70",
+    "semantic_hash": "d3f37e11778a47b718bc98aa31077c70"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\pages\\AdminPage.jsx": {
+    "mtime": 1780342720.2206461,
+    "ast_hash": "53f484d6d4fb997cb027292302e25038",
+    "semantic_hash": "53f484d6d4fb997cb027292302e25038"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\pages\\ClientPage.jsx": {
+    "mtime": 1780324024.0813837,
+    "ast_hash": "9e2d680d4fa8afc0d4d7e11fef7f2275",
+    "semantic_hash": "9e2d680d4fa8afc0d4d7e11fef7f2275"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\pages\\DriverPage.jsx": {
+    "mtime": 1780166113.4248445,
+    "ast_hash": "a0afb011ce1b0191219abf392e752f65",
+    "semantic_hash": "a0afb011ce1b0191219abf392e752f65"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\pages\\PartnerPage.jsx": {
+    "mtime": 1780324089.0083897,
+    "ast_hash": "29c51b017a211b0984e5567835872199",
+    "semantic_hash": "29c51b017a211b0984e5567835872199"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\useDarkMode.js": {
+    "mtime": 1779319121.073178,
+    "ast_hash": "8c3a5032588706d55786e431ae2adb35",
+    "semantic_hash": "8c3a5032588706d55786e431ae2adb35"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\useTelegram.js": {
+    "mtime": 1779302301.0014532,
+    "ast_hash": "d4aadbb7e31ab68c8b68f8ac1ba72c1b",
+    "semantic_hash": "d4aadbb7e31ab68c8b68f8ac1ba72c1b"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\tailwind.config.js": {
+    "mtime": 1779324067.1548378,
+    "ast_hash": "28f8a259a45820d3cbc2575e910e39eb",
+    "semantic_hash": "28f8a259a45820d3cbc2575e910e39eb"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\vite.config.js": {
+    "mtime": 1779306886.0470014,
+    "ast_hash": "84ccf0d6c8166d635c9344536548e5c3",
+    "semantic_hash": "84ccf0d6c8166d635c9344536548e5c3"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\sheets.py": {
+    "mtime": 1780387246.001904,
+    "ast_hash": "df6fc13644a6f0c39e01dca5351e0092",
+    "semantic_hash": "df6fc13644a6f0c39e01dca5351e0092"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\.github\\workflows\\pages.yml": {
+    "mtime": 1779356652.7364862,
+    "ast_hash": "0e6a6f9cbfe4452d29acf846cbbf6037",
+    "semantic_hash": "0e6a6f9cbfe4452d29acf846cbbf6037"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\index.html": {
+    "mtime": 1779320367.348965,
+    "ast_hash": "ce4116736cbc2b48d1979a68e8395310",
+    "semantic_hash": "ce4116736cbc2b48d1979a68e8395310"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\requirements.txt": {
+    "mtime": 1780323854.7424743,
+    "ast_hash": "adc4a46d6108ab5207f29c94873907bd",
+    "semantic_hash": "adc4a46d6108ab5207f29c94873907bd"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\logo.svg": {
+    "mtime": 1779192184.0922518,
+    "ast_hash": "29bcac8f58eb20927edfd55fd5347b98",
+    "semantic_hash": "29bcac8f58eb20927edfd55fd5347b98"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\components\\DebugPanel.jsx": {
+    "mtime": 1780387586.3527958,
+    "ast_hash": "d215ae16677cb87f043449837cd673b2",
+    "semantic_hash": "d215ae16677cb87f043449837cd673b2"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\src\\debug.js": {
+    "mtime": 1780387549.683994,
+    "ast_hash": "186fd1866c412e90fa15a6e883625642",
+    "semantic_hash": "186fd1866c412e90fa15a6e883625642"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-211.webp": {
+    "mtime": 1780323206.0264857,
+    "ast_hash": "4e570ac654ba9d785999bb2f3f085f0e",
+    "semantic_hash": "4e570ac654ba9d785999bb2f3f085f0e"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-213.webp": {
+    "mtime": 1780323205.8110952,
+    "ast_hash": "3a8fb5da9af5d4653fb56c5f19370f7d",
+    "semantic_hash": "3a8fb5da9af5d4653fb56c5f19370f7d"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-3311.webp": {
+    "mtime": 1780323205.436177,
+    "ast_hash": "391ba389040d0bd0f0b686fc3f7a2cd2",
+    "semantic_hash": "391ba389040d0bd0f0b686fc3f7a2cd2"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-3313.webp": {
+    "mtime": 1780323205.6096892,
+    "ast_hash": "5a9e010f0094a82fb1ecad4bd6cb10bb",
+    "semantic_hash": "5a9e010f0094a82fb1ecad4bd6cb10bb"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-3536.webp": {
+    "mtime": 1780323206.4153821,
+    "ast_hash": "6398a6381d279e269e06c897887932d0",
+    "semantic_hash": "6398a6381d279e269e06c897887932d0"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-3579.webp": {
+    "mtime": 1780323205.0899012,
+    "ast_hash": "c97e575bc7e365543b95491a2aec67c0",
+    "semantic_hash": "c97e575bc7e365543b95491a2aec67c0"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-3595.webp": {
+    "mtime": 1780323205.2484488,
+    "ast_hash": "f223a3e63ec9588cef604748cb80d014",
+    "semantic_hash": "f223a3e63ec9588cef604748cb80d014"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-6807.webp": {
+    "mtime": 1780323206.227867,
+    "ast_hash": "11944049c9cfc931dd032efdc365e2f6",
+    "semantic_hash": "11944049c9cfc931dd032efdc365e2f6"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8011.webp": {
+    "mtime": 1780323204.3530042,
+    "ast_hash": "1a736a2c054796e6748eb244c09bcc03",
+    "semantic_hash": "1a736a2c054796e6748eb244c09bcc03"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8028.webp": {
+    "mtime": 1780323206.6375833,
+    "ast_hash": "9d56b8ab9e86c0e1640eaf0d58509914",
+    "semantic_hash": "9d56b8ab9e86c0e1640eaf0d58509914"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8031.webp": {
+    "mtime": 1780323204.1861403,
+    "ast_hash": "3cc0964656ae63aebb24363ee3e5be81",
+    "semantic_hash": "3cc0964656ae63aebb24363ee3e5be81"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8060.webp": {
+    "mtime": 1780323206.8042464,
+    "ast_hash": "b890036dd12e95b5afccafa5a92f477c",
+    "semantic_hash": "b890036dd12e95b5afccafa5a92f477c"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8821.webp": {
+    "mtime": 1780323204.9153166,
+    "ast_hash": "8a454674a787e6e427bc01117b4c5b71",
+    "semantic_hash": "8a454674a787e6e427bc01117b4c5b71"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8823.webp": {
+    "mtime": 1780323204.5611491,
+    "ast_hash": "1c11a50faffbb2a6e6059ed3fe5627ac",
+    "semantic_hash": "1c11a50faffbb2a6e6059ed3fe5627ac"
+  },
+  "C:\\Users\\dante\\OneDrive\\Desktop\\sooqtj-bot\\mini-app\\public\\products\\ORM-8860.webp": {
+    "mtime": 1780323204.748612,
+    "ast_hash": "46fe0bfd12505b258487cdf063321337",
+    "semantic_hash": "46fe0bfd12505b258487cdf063321337"
+  }
+}
