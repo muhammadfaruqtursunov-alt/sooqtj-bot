@@ -92,6 +92,30 @@ export default function AdminPage() {
   const [customFrom,      setCustomFrom]      = useState('')
   const [customTo,        setCustomTo]        = useState('')
   const [orderSearch,     setOrderSearch]     = useState('')
+  const [editOrderModal,  setEditOrderModal]  = useState(null)
+  const [editFields,      setEditFields]      = useState({})
+
+  const openEditOrder = (o) => {
+    setEditOrderModal(o)
+    setEditFields({ name: o.name||'', phone: o.phone||'', address: o.address||'', product_name: o.product_name||'', quantity: o.quantity||1, price: o.price||'' })
+  }
+  const saveEditOrder = async () => {
+    if (!editOrderModal) return
+    try {
+      await api.editOrder(editOrderModal.id, editFields)
+      setEditOrderModal(null)
+      loadOrders()
+      setToast({ ok: true, text: 'Заказ обновлён' })
+    } catch { setToast({ ok: false, text: 'Ошибка обновления' }) }
+  }
+  const deleteOrder = async (orderId) => {
+    if (!window.confirm(`Удалить заказ #${orderId}?`)) return
+    try {
+      await api.deleteOrder(orderId)
+      setOrders(prev => prev.filter(o => o.id !== orderId))
+      setToast({ ok: true, text: 'Заказ удалён' })
+    } catch { setToast({ ok: false, text: 'Ошибка удаления' }) }
+  }
 
   const SWIPE_TABS = 5
 
@@ -617,6 +641,18 @@ export default function AdminPage() {
                                 }`}>{s}
                               </button>
                             ))}
+                          </div>
+                          <div className="flex gap-2 mt-2 pt-2 border-t border-black/[0.05] dark:border-white/[0.05]">
+                            <button onClick={() => openEditOrder(o)}
+                              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-bold py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 active:scale-95 transition-all">
+                              <Pencil size={13} strokeWidth={2.5} />
+                              Изменить
+                            </button>
+                            <button onClick={() => deleteOrder(o.id)}
+                              className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-bold py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 active:scale-95 transition-all">
+                              <Trash2 size={13} strokeWidth={2.5} />
+                              Удалить
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1530,11 +1566,85 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {/* Net profit preview */}
+              {(() => {
+                const finalPrice = Math.max(0, (Number(mo.price) || 0) - (Number(mo.discount) || 0))
+                const qtyN = Number(mo.quantity) || 1
+                const op = mo.article ? productByArticle[mo.article] : null
+                const cost = op ? computeCost(op).total * qtyN : null
+                const profit = cost !== null ? finalPrice - cost : null
+                if (profit === null) return null
+                return (
+                  <div className={`rounded-xl px-4 py-3 flex items-center justify-between ${
+                    profit >= 0
+                      ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50'
+                      : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50'
+                  }`}>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">💰 Чистая прибыль</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">с/с: {fmt(cost)} сом × {qtyN} шт</p>
+                    </div>
+                    <p className={`text-xl font-black ${profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500'}`}>
+                      {profit >= 0 ? '+' : ''}{fmt(profit)} <span className="text-sm font-bold opacity-70">сом</span>
+                    </p>
+                  </div>
+                )
+              })()}
+
               <button onClick={submitManualOrder}
                 className="w-full gold text-[#111] font-black py-3.5 rounded-2xl text-sm mt-2 active:scale-95 transition-transform shadow-[0_4px_16px_rgba(245,197,24,0.35)]">
                 Добавить заказ
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Edit Order Modal ── */}
+      {editOrderModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+          onClick={e => { if (e.target === e.currentTarget) setEditOrderModal(null) }}>
+          <div className="w-full max-w-lg bg-white dark:bg-[#1E1F26] rounded-t-[28px] p-5 pb-8 space-y-3"
+            style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="flex items-center justify-between mb-1">
+              <p className="font-black text-base text-[#0A0A0A] dark:text-white">✏️ Заказ #{editOrderModal.id}</p>
+              <button onClick={() => setEditOrderModal(null)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-[#F5F5F5] dark:bg-white/10">
+                <X size={16} />
+              </button>
+            </div>
+            {[
+              { key: 'name',         label: 'Имя клиента' },
+              { key: 'phone',        label: 'Телефон'     },
+              { key: 'address',      label: 'Адрес'       },
+              { key: 'product_name', label: 'Товар'       },
+            ].map(({ key, label }) => (
+              <div key={key}>
+                <p className="text-[10px] font-bold text-gray-400 mb-1 px-1 uppercase tracking-wider">{label}</p>
+                <input value={editFields[key] || ''}
+                  onChange={e => setEditFields(prev => ({ ...prev, [key]: e.target.value }))}
+                  className="w-full bg-[#F5F5F5] dark:bg-white/5 rounded-xl px-3.5 py-3 text-sm font-bold text-[#0A0A0A] dark:text-white outline-none" />
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <p className="text-[10px] font-bold text-gray-400 mb-1 px-1 uppercase tracking-wider">Кол-во</p>
+                <input inputMode="numeric" value={editFields.quantity || ''}
+                  onChange={e => setEditFields(prev => ({ ...prev, quantity: e.target.value.replace(/\D/g, '') }))}
+                  className="w-full bg-[#F5F5F5] dark:bg-white/5 rounded-xl px-3.5 py-3 text-sm font-bold text-[#0A0A0A] dark:text-white outline-none" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-bold text-gray-400 mb-1 px-1 uppercase tracking-wider">Цена (сом)</p>
+                <input inputMode="decimal" value={editFields.price || ''}
+                  onChange={e => setEditFields(prev => ({ ...prev, price: e.target.value.replace(/[^\d.]/g, '') }))}
+                  className="w-full bg-[#F5F5F5] dark:bg-white/5 rounded-xl px-3.5 py-3 text-sm font-bold text-[#0A0A0A] dark:text-white outline-none" />
+              </div>
+            </div>
+            <button onClick={saveEditOrder}
+              className="w-full gold text-[#111] font-black py-3.5 rounded-2xl text-sm active:scale-95 transition-transform shadow-[0_4px_16px_rgba(245,197,24,0.35)]">
+              Сохранить
+            </button>
           </div>
         </div>
       )}

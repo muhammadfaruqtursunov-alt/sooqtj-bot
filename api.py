@@ -719,6 +719,16 @@ class StatusIn(BaseModel):
     status: str
 
 
+class OrderEditIn(BaseModel):
+    name: str | None = None
+    phone: str | None = None
+    address: str | None = None
+    product_name: str | None = None
+    quantity: int | None = None
+    price: float | None = None
+    status: str | None = None
+
+
 @app.put("/api/orders/{order_id}")
 def update_order(order_id: str, data: StatusIn, user=Depends(require_driver_or_admin)):
     ok = sheets.update_order_status(order_id, data.status)
@@ -761,11 +771,34 @@ def update_order(order_id: str, data: StatusIn, user=Depends(require_driver_or_a
     }
 
 
+@app.patch("/api/orders/{order_id}/edit")
+def edit_order(order_id: str, data: OrderEditIn, user=Depends(require_admin)):
+    fields = {k: v for k, v in data.model_dump().items() if v is not None}
+    if not fields:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    ok = sheets.update_order_fields(order_id, fields)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return {"ok": True}
+
+
+@app.delete("/api/orders/{order_id}")
+def delete_order(order_id: str, user=Depends(require_admin)):
+    ok = sheets.delete_order(order_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return {"ok": True}
+
+
 # ─── STATS ──────────────────────────────────────────────────
 
 @app.get("/api/stats")
 def stats(user=Depends(require_admin)):
-    return sheets.get_stats()
+    try:
+        return sheets.get_stats()
+    except Exception as e:
+        print(f"[stats] error: {e}")
+        return {"today_count": 0, "today_sum": 0, "month_count": 0, "month_sum": 0, "total_count": 0}
 
 
 # ─── CLIENTS ────────────────────────────────────────────────
