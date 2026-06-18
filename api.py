@@ -1,5 +1,6 @@
 import os
 import json
+import time as _time  # noqa: F401 — keep for Railway redeploy trigger
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Header, UploadFile, File, Depends, Request
