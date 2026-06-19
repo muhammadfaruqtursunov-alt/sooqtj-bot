@@ -92,6 +92,7 @@ export default function AdminPage() {
   const [customFrom,      setCustomFrom]      = useState('')
   const [customTo,        setCustomTo]        = useState('')
   const [orderSearch,     setOrderSearch]     = useState('')
+  const [vipPhones,       setVipPhones]       = useState(new Set())
   const [editOrderModal,  setEditOrderModal]  = useState(null)
   const [editFields,      setEditFields]      = useState({})
 
@@ -132,6 +133,21 @@ export default function AdminPage() {
   const loadProducts = () => api.getProducts().then(setProducts).catch(console.warn)
   const loadClients  = () => api.getClients().then(setClients).catch(console.warn)
   const loadExpenses = () => api.getExpenses().then(setExpenses).catch(console.warn)
+  const loadVip      = () => api.getVipPhones().then(phones => setVipPhones(new Set(phones))).catch(console.warn)
+
+  const toggleVip = async (phone, name) => {
+    try {
+      const res = await api.toggleVip(phone)
+      setVipPhones(prev => {
+        const next = new Set(prev)
+        if (res.is_vip) next.add(phone)
+        else next.delete(phone)
+        return next
+      })
+      setToast({ ok: true, text: res.is_vip ? `⭐ ${name} добавлен в ВИП` : `${name} убран из ВИП` })
+      setTimeout(() => setToast(null), 3000)
+    } catch { setToast({ ok: false, text: 'Ошибка' }); setTimeout(() => setToast(null), 3000) }
+  }
 
   const submitExpense = async () => {
     const amt = parseFloat(String(expForm.amount).replace(',', '.')) || 0
@@ -156,7 +172,7 @@ export default function AdminPage() {
 
   const loadAll = () => {
     setError('')
-    return Promise.all([loadOrders(), loadStats(), loadProducts(), loadClients(), loadExpenses()])
+    return Promise.all([loadOrders(), loadStats(), loadProducts(), loadClients(), loadExpenses(), loadVip()])
       .catch(e => setError(String(e))).finally(() => setLoading(false))
   }
   useEffect(() => { loadAll() }, [])
@@ -592,6 +608,17 @@ export default function AdminPage() {
                               <Package size={13} color="#111" strokeWidth={2.5} />
                             </div>
                             <p className="font-black text-sm text-[#0A0A0A] dark:text-white">#{o.id}</p>
+                            {/* VIP star */}
+                            <button onClick={() => toggleVip(o.phone, o.name)}
+                              className="active:scale-90 transition-transform"
+                              title={vipPhones.has(o.phone) ? 'Убрать из ВИП' : 'Добавить в ВИП'}>
+                              <Star size={16}
+                                strokeWidth={2}
+                                className={vipPhones.has(o.phone)
+                                  ? 'text-yellow-400 fill-yellow-400'
+                                  : 'text-gray-300 dark:text-gray-600 fill-transparent'}
+                              />
+                            </button>
                           </div>
                           <StatusBadge status={o.status} />
                         </div>
@@ -1079,6 +1106,7 @@ export default function AdminPage() {
                 {[
                   { key: 'all',   label: 'Все клиенты' },
                   { key: 'today', label: `Новые сегодня (${todayNew})` },
+                  { key: 'vip',   label: `⭐ ВИП (${vipPhones.size})` },
                 ].map(f => (
                   <button key={f.key} onClick={() => setClientFilter(f.key)}
                     className={`flex-1 text-xs py-2.5 rounded-2xl font-bold transition-all active:scale-95 ${
@@ -1199,6 +1227,56 @@ export default function AdminPage() {
                 <div className="flex flex-col items-center gap-3 py-12">
                   <UserX size={48} color={dark ? '#2A2A2A' : '#DDD'} strokeWidth={1.5} />
                   <p className="text-sm font-semibold text-gray-400 dark:text-gray-600">Пока нет новых клиентов</p>
+                </div>
+              ) : clientFilter === 'vip' ? (
+                <div className="space-y-2.5">
+                  {vipPhones.size === 0 ? (
+                    <div className="flex flex-col items-center gap-3 py-12">
+                      <Star size={48} color={dark ? '#2A2A2A' : '#DDD'} strokeWidth={1.5} />
+                      <p className="text-sm font-semibold text-gray-400 dark:text-gray-600">Нет ВИП клиентов</p>
+                      <p className="text-xs text-gray-300 dark:text-gray-700">Нажми ⭐ на заказе чтобы добавить</p>
+                    </div>
+                  ) : (
+                    // show vip clients from orders list matched by phone
+                    (() => {
+                      const vipOrders = []
+                      const seen = new Set()
+                      orders.forEach(o => {
+                        if (vipPhones.has(o.phone) && !seen.has(o.phone)) {
+                          seen.add(o.phone)
+                          vipOrders.push(o)
+                        }
+                      })
+                      // also show phones not in orders (added but no order loaded)
+                      vipPhones.forEach(ph => {
+                        if (!seen.has(ph)) vipOrders.push({ phone: ph, name: ph })
+                      })
+                      return vipOrders.map((c, i) => {
+                        const initials = (c.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                        return (
+                          <div key={i} className="bg-white dark:bg-[#2D2F37] rounded-[20px] p-3.5 flex items-center gap-3
+                            shadow-[0_2px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.4)]
+                            border border-yellow-300/40 dark:border-yellow-500/20 animate-fadeIn">
+                            <div className="w-10 h-10 gold rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm relative">
+                              <span className="text-sm font-black text-[#111]">{initials}</span>
+                              <Star size={10} className="absolute -top-1 -right-1 text-yellow-400 fill-yellow-400" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <p className="font-bold text-sm text-[#0A0A0A] dark:text-white line-clamp-1">{c.name}</p>
+                                <span className="flex-shrink-0 bg-yellow-400 text-[#111] text-[9px] font-black px-1.5 py-0.5 rounded-full">ВИП</span>
+                              </div>
+                              <p className="text-xs text-gray-400 mt-0.5">{c.phone}</p>
+                            </div>
+                            <button onClick={() => toggleVip(c.phone, c.name)}
+                              className="active:scale-90 transition-transform p-1">
+                              <Star size={18} strokeWidth={2} className="text-yellow-400 fill-yellow-400" />
+                            </button>
+                          </div>
+                        )
+                      })
+                    })()
+                  )}
                 </div>
               ) : (
                 <div className="space-y-2.5">

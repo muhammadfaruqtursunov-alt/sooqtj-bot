@@ -115,6 +115,13 @@ def init_db():
                     created_at TIMESTAMP NOT NULL DEFAULT NOW()
                 )
             """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS vip_clients (
+                    phone      TEXT PRIMARY KEY,
+                    name       TEXT NOT NULL DEFAULT '',
+                    added_at   TIMESTAMP NOT NULL DEFAULT NOW()
+                )
+            """)
         conn.commit()
         print("[db] init_db OK")
     except Exception as e:
@@ -391,6 +398,65 @@ def delete_expense(expense_id: int) -> bool:
         logging.error(f"[db] delete_expense error: {e}")
         conn.rollback()
         return False
+
+
+def toggle_vip(phone: str, name: str = "") -> bool:
+    """Toggle VIP status for a client by phone. Returns True = now VIP, False = removed."""
+    if not _pg_ok or not phone:
+        return False
+    conn = _conn()
+    if conn is None:
+        return False
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM vip_clients WHERE phone = %s", (phone,))
+            if cur.fetchone():
+                cur.execute("DELETE FROM vip_clients WHERE phone = %s", (phone,))
+                conn.commit()
+                return False
+            else:
+                cur.execute(
+                    "INSERT INTO vip_clients (phone, name) VALUES (%s, %s) ON CONFLICT (phone) DO UPDATE SET name=EXCLUDED.name",
+                    (phone, name or ''),
+                )
+                conn.commit()
+                return True
+    except Exception as e:
+        logging.error(f"[db] toggle_vip error: {e}")
+        conn.rollback()
+        return False
+
+
+def get_vip_phones() -> set:
+    """Return set of VIP phone numbers."""
+    if not _pg_ok:
+        return set()
+    conn = _conn()
+    if conn is None:
+        return set()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT phone FROM vip_clients")
+            return {r[0] for r in cur.fetchall()}
+    except Exception as e:
+        logging.error(f"[db] get_vip_phones error: {e}")
+        return set()
+
+
+def get_vip_clients() -> list[dict]:
+    """Return all VIP clients."""
+    if not _pg_ok:
+        return []
+    conn = _conn()
+    if conn is None:
+        return []
+    try:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute("SELECT phone, name, TO_CHAR(added_at,'YYYY-MM-DD') AS added_at FROM vip_clients ORDER BY added_at DESC")
+            return [dict(r) for r in cur.fetchall()]
+    except Exception as e:
+        logging.error(f"[db] get_vip_clients error: {e}")
+        return []
 
 
 def reset_all_data() -> dict:

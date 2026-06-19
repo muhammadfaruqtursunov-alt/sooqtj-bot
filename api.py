@@ -866,6 +866,26 @@ def remove_expense(expense_id: int, user=Depends(require_admin)):
     return {"ok": ok}
 
 
+@app.post("/api/vip/{phone}/toggle")
+def toggle_vip(phone: str, user=Depends(require_admin)):
+    from urllib.parse import unquote
+    phone_clean = unquote(phone).strip()
+    # name comes from query param
+    name = ""
+    is_vip = db.toggle_vip(phone_clean, name)
+    return {"ok": True, "is_vip": is_vip, "phone": phone_clean}
+
+
+@app.get("/api/vip")
+def get_vip(user=Depends(require_admin)):
+    return db.get_vip_clients()
+
+
+@app.get("/api/vip/phones")
+def get_vip_phones(user=Depends(require_admin)):
+    return list(db.get_vip_phones())
+
+
 class BroadcastIn(BaseModel):
     text: str
 
