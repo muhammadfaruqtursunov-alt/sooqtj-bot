@@ -5,7 +5,7 @@ from telebot import types
 
 TOKEN        = os.getenv("BOT_TOKEN")
 ADMIN_ID     = int(os.getenv("ADMIN_ID", "7555325054"))
-WEBAPP_URL   = "https://sooqtj-lang.github.io/sooqtj-bot"  # hardcoded — bypass stale Railway env
+WEBAPP_URL   = os.getenv("WEBAPP_URL", "https://web-production-748b4.up.railway.app")
 DRIVER_CODE  = os.getenv("DRIVER_CODE", "")
 PARTNER_CODE = os.getenv("PARTNER_CODE", "ALISHER-9274")
 
