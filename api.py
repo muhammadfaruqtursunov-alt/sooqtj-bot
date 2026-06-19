@@ -62,6 +62,21 @@ app.add_middleware(
 ADMIN_ID = int(os.getenv("ADMIN_ID", "7555325054"))
 bot = bot_module.bot  # reuse bot instance that has all handlers registered
 
+
+def _notify_staff(text: str, exclude_uid: int | None = None):
+    """Send a Telegram message to admin + all drivers + all partners."""
+    recipients = set()
+    recipients.add(ADMIN_ID)
+    recipients.update(auth._active_drivers)
+    recipients.update(auth._partner_ids)
+    if exclude_uid:
+        recipients.discard(exclude_uid)
+    for uid in recipients:
+        try:
+            bot.send_message(uid, text, parse_mode="Markdown")
+        except Exception as e:
+            print(f"[notify_staff] uid={uid} error: {e}")
+
 # ─── AUTH ───────────────────────────────────────────────────
 
 def get_current_user(x_init_data: str = Header(default=""), x_user_id: str = Header(default="")):
@@ -580,8 +595,7 @@ def create_order(data: OrderIn, user=Depends(get_current_user)):
     db.upsert_client(user["id"], data.name, data.phone, data.address, data.price)
     try:
         art_line = f"🔖 Арт.: `{data.article}`\n" if data.article else ""
-        bot.send_message(
-            ADMIN_ID,
+        _notify_staff(
             f"🛒 *НОВЫЙ ЗАКАЗ #{order_id}!*\n\n"
             f"👤 {data.name}\n"
             f"📱 {data.phone}\n"
@@ -589,7 +603,6 @@ def create_order(data: OrderIn, user=Depends(get_current_user)):
             f"{art_line}"
             f"📍 {data.address}\n"
             f"💰 {data.price} сомони",
-            parse_mode="Markdown",
         )
     except Exception:
         pass
@@ -630,8 +643,7 @@ def create_manual_order(data: ManualOrderIn, user=Depends(require_admin)):
             print(f"[orders/manual] decrement_product_qty failed: {e}")
     try:
         art_line = f"🔖 Арт.: `{data.article}`\n" if data.article else ""
-        bot.send_message(
-            ADMIN_ID,
+        _notify_staff(
             f"📝 *РУЧНОЙ ЗАКАЗ #{order_id}*"
             + (f" ({data.source})" if data.source else "")
             + f"\n\n"
@@ -641,7 +653,6 @@ def create_manual_order(data: ManualOrderIn, user=Depends(require_admin)):
             f"📦 {data.product_name} x{data.quantity}\n"
             f"{art_line}"
             f"💰 {data.price:.0f} сомони",
-            parse_mode="Markdown",
         )
     except Exception:
         pass
@@ -681,8 +692,7 @@ def create_order_batch(data: BatchOrderIn, user=Depends(get_current_user)):
             for it in data.items
         )
         first_id = order_ids[0]
-        bot.send_message(
-            ADMIN_ID,
+        _notify_staff(
             f"🛒 *НОВЫЙ ЗАКАЗ #{first_id}*"
             + (f" (+{len(order_ids)-1} поз.)" if len(order_ids) > 1 else "")
             + f"\n\n"
@@ -691,7 +701,6 @@ def create_order_batch(data: BatchOrderIn, user=Depends(get_current_user)):
             f"📍 {data.address}\n\n"
             f"📦 *Товары:*\n{lines}\n\n"
             f"💰 *Итого: {total:.0f} сомони*",
-            parse_mode="Markdown",
         )
     except Exception:
         pass
