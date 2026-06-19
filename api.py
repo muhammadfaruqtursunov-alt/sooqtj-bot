@@ -921,6 +921,35 @@ def reset_stats(user=Depends(require_admin)):
     return result
 
 
+@app.post("/api/_admin/reset-except-delivered")
+def reset_except_delivered(user=Depends(require_admin)):
+    """Partial reset: delete non-delivered orders, keep expenses, reset clients+reviews."""
+    result = {"ok": True, "orders_deleted": 0, "orders_kept": 0,
+              "clients_deleted": 0, "reviews_deleted": 0, "errors": []}
+    try:
+        r = sheets.delete_orders_except_delivered()
+        result["orders_deleted"] = r.get("deleted", 0)
+        result["orders_kept"]    = r.get("kept", 0)
+        if "error" in r:
+            result["errors"].append(f"sheets: {r['error']}")
+    except Exception as e:
+        result["errors"].append(f"sheets: {e}")
+        print(f"[reset-partial] sheets error: {e}")
+    try:
+        conn = db._conn()
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM clients"); result["clients_deleted"] = cur.rowcount
+                cur.execute("DELETE FROM reviews")
+                result["reviews_deleted"] = cur.rowcount
+            conn.commit()
+    except Exception as e:
+        result["errors"].append(f"db: {e}")
+        print(f"[reset-partial] db error: {e}")
+    print(f"[reset-partial] done: {result}")
+    return result
+
+
 @app.post("/api/broadcast")
 def broadcast(data: BroadcastIn, user=Depends(require_admin)):
     if not data.text.strip():

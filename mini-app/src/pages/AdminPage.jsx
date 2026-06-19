@@ -1348,6 +1348,37 @@ export default function AdminPage() {
                 </button>
               </div>
 
+              {/* Partial reset — keep delivered */}
+              <div className={card}>
+                <p className="font-black text-sm text-[#0A0A0A] dark:text-white mb-2 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-lg flex items-center justify-center shadow-sm bg-orange-500">
+                    <Trash2 size={13} color="#fff" strokeWidth={2.5} />
+                  </span>
+                  Сброс (кроме доставленных)
+                </p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-3 leading-relaxed">
+                  Удаляет все заказы кроме <span className="text-green-500 font-bold">«Доставлен»</span>, клиентов и отзывы.{' '}
+                  <span className="text-yellow-500 font-bold">Расходы и цены НЕ затрагиваются.</span>
+                </p>
+                <button onClick={async () => {
+                  if (!window.confirm('Удалить все заказы кроме «Доставлен»?\n\nРасходы и доставленные заказы сохранятся.\nКлиенты и отзывы будут очищены.')) return
+                  try {
+                    const res = await api.resetExceptDelivered()
+                    setToast({ ok: true, text: `✓ Удалено заказов: ${res.orders_deleted}, сохранено: ${res.orders_kept}, клиентов: ${res.clients_deleted}` })
+                    loadAll()
+                  } catch (e) {
+                    setToast({ ok: false, text: `Ошибка: ${e.message}` })
+                  }
+                  setTimeout(() => setToast(null), 7000)
+                }}
+                  className="w-full bg-orange-500 text-white font-black rounded-2xl py-3 text-sm
+                    active:scale-95 transition-transform shadow-[0_4px_16px_rgba(249,115,22,0.35)]
+                    flex items-center justify-center gap-2">
+                  <Trash2 size={15} strokeWidth={2.5} />
+                  Умный сброс
+                </button>
+              </div>
+
               {/* Reset stats */}
               <div className={card}>
                 <p className="font-black text-sm text-[#0A0A0A] dark:text-white mb-2 flex items-center gap-2">

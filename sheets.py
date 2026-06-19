@@ -452,6 +452,32 @@ def decrement_product_qty(product_id: str, quantity: int = 1) -> bool:
         return False
 
 
+def delete_orders_except_delivered() -> dict:
+    """Delete all orders EXCEPT those with status 'Доставлен'.
+    Rewrites the sheet: header + only delivered rows. Returns counts."""
+    ws = _ensure_orders_sheet()
+    try:
+        all_rows = ws.get_all_values()
+        if not all_rows:
+            return {"deleted": 0, "kept": 0}
+        header = all_rows[0]
+        # find status column index
+        try:
+            status_idx = header.index("status")
+        except ValueError:
+            status_idx = 10  # fallback: column 11 (0-indexed 10)
+        delivered = [r for r in all_rows[1:] if len(r) > status_idx and r[status_idx] == "Доставлен"]
+        deleted = len(all_rows) - 1 - len(delivered)
+        # Rewrite sheet: clear + header + delivered rows only
+        ws.clear()
+        ws.update("A1", [header] + delivered)
+        print(f"[sheets] delete_orders_except_delivered: kept={len(delivered)} deleted={deleted}")
+        return {"deleted": deleted, "kept": len(delivered)}
+    except Exception as e:
+        print(f"[sheets] delete_orders_except_delivered error: {e}")
+        return {"deleted": 0, "kept": 0, "error": str(e)}
+
+
 def clear_orders() -> int:
     """Clear all order rows and restore only the header. Returns count of deleted rows.
     Uses ws.clear() + single header write instead of row-by-row deletion (avoids timeout)."""
