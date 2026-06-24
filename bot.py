@@ -7,7 +7,7 @@ TOKEN        = os.getenv("BOT_TOKEN")
 ADMIN_ID     = int(os.getenv("ADMIN_ID", "7555325054"))
 WEBAPP_URL   = os.getenv("WEBAPP_URL", "https://web-production-748b4.up.railway.app")
 DRIVER_CODE  = os.getenv("DRIVER_CODE", "")
-PARTNER_CODE = os.getenv("PARTNER_CODE", "ALISHER-9274")
+PARTNER_CODE = os.getenv("PARTNER_CODE", "")
 
 _pending_partner: set = set()
 
@@ -42,22 +42,28 @@ def _save_driver_to_railway(user_id: int):
         return
     ids.append(str(user_id))
     new_value = ",".join(ids)
+    _MUTATION = """
+        mutation VariableUpsert($input: VariableUpsertInput!) {
+            variableUpsert(input: $input)
+        }
+    """
     try:
         requests.post(
             "https://backboard.railway.app/graphql/v2",
             headers={"Authorization": f"Bearer {_RAILWAY_TOKEN}", "Content-Type": "application/json"},
-            json={"query": f"""mutation {{
-                variableUpsert(input: {{
-                    projectId: "{_PROJECT_ID}",
-                    serviceId: "{_SERVICE_ID}",
-                    environmentId: "{_ENVIRONMENT_ID}",
-                    name: "DRIVER_IDS",
-                    value: "{new_value}"
-                }})
-            }}"""},
+            json={
+                "query": _MUTATION,
+                "variables": {"input": {
+                    "projectId": _PROJECT_ID,
+                    "serviceId": _SERVICE_ID,
+                    "environmentId": _ENVIRONMENT_ID,
+                    "name": "DRIVER_IDS",
+                    "value": new_value,
+                }},
+            },
             timeout=5,
         )
-        print(f"[driver] saved {user_id} to Railway DRIVER_IDS={new_value}")
+        print(f"[driver] saved driver id to Railway DRIVER_IDS")
     except Exception as e:
         print(f"[driver] Railway update error: {e}")
 
@@ -122,22 +128,28 @@ def _save_partner_to_railway(user_id: int):
         return
     ids.append(str(user_id))
     new_value = ",".join(ids)
+    _MUTATION = """
+        mutation VariableUpsert($input: VariableUpsertInput!) {
+            variableUpsert(input: $input)
+        }
+    """
     try:
         requests.post(
             "https://backboard.railway.app/graphql/v2",
             headers={"Authorization": f"Bearer {_RAILWAY_TOKEN}", "Content-Type": "application/json"},
-            json={"query": f"""mutation {{
-                variableUpsert(input: {{
-                    projectId: "{_PROJECT_ID}",
-                    serviceId: "{_SERVICE_ID}",
-                    environmentId: "{_ENVIRONMENT_ID}",
-                    name: "PARTNER_IDS",
-                    value: "{new_value}"
-                }})
-            }}"""},
+            json={
+                "query": _MUTATION,
+                "variables": {"input": {
+                    "projectId": _PROJECT_ID,
+                    "serviceId": _SERVICE_ID,
+                    "environmentId": _ENVIRONMENT_ID,
+                    "name": "PARTNER_IDS",
+                    "value": new_value,
+                }},
+            },
             timeout=5,
         )
-        print(f"[partner] saved {user_id} to Railway PARTNER_IDS={new_value}")
+        print(f"[partner] saved partner id to Railway PARTNER_IDS")
     except Exception as e:
         print(f"[partner] Railway update error: {e}")
 

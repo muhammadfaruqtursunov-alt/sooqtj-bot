@@ -32,6 +32,16 @@ def _load_info():
         return json.load(f)
 
 
+_FORMULA_TRIGGERS = ('=', '+', '-', '@', '\t', '\r', '|', '%')
+
+def _safe_cell(value) -> str:
+    """Neutralize spreadsheet formula injection by prefixing dangerous values."""
+    s = str(value) if value is not None else ""
+    if s and s[0] in _FORMULA_TRIGGERS:
+        return "'" + s
+    return s
+
+
 def ensure_connected():
     """Connect once, reuse on all subsequent calls."""
     global _gc, _ss
@@ -184,8 +194,8 @@ def add_product(name, category, photo_url, price, qty, cost=None):
     id_idx = _find_col(header, "ID", "id")
     if 0 <= id_idx < len(row):
         row[id_idx] = product_id
-    setcol(name, "name")
-    setcol(category, "category")
+    setcol(_safe_cell(name), "name")
+    setcol(_safe_cell(category), "category")
     if photo_url:
         setcol(photo_url, "photo")
     setcol(str(price), "price")
@@ -302,8 +312,8 @@ def create_order(user_id, name, phone, address, product_id, product_name, quanti
     order_id  = str(uuid.uuid4())[:8].upper()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ws.append_row([
-        order_id, str(user_id), name, phone, address,
-        str(product_id), product_name, str(quantity), str(price),
+        order_id, str(user_id), _safe_cell(name), _safe_cell(phone), _safe_cell(address),
+        str(product_id), _safe_cell(product_name), str(quantity), str(price),
         timestamp, "Новый", "False", str(article or ""),
     ])
     return order_id

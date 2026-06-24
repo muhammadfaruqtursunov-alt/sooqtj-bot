@@ -39,24 +39,33 @@ def on_startup():
     try:
         import requests as _rq
         token = os.getenv("BOT_TOKEN", "")
+        webhook_secret = os.getenv("WEBHOOK_SECRET", "")
         if token:
             url = f"{BACKEND_URL}/webhook"
+            payload = {"url": url, "drop_pending_updates": False}
+            if webhook_secret:
+                payload["secret_token"] = webhook_secret
             resp = _rq.post(
                 f"https://api.telegram.org/bot{token}/setWebhook",
-                json={"url": url, "drop_pending_updates": False},
+                json=payload,
                 timeout=10,
             )
-            print(f"[startup] setWebhook → {url} | {resp.text[:300]}")
+            ok = resp.json().get("ok", False)
+            print(f"[startup] setWebhook → {url} | ok={ok}")
         else:
             print("[startup] BOT_TOKEN missing — skipping setWebhook")
     except Exception as e:
         print(f"[startup] setWebhook FAILED — {e}")
 
+_ALLOWED_ORIGINS = [
+    "https://web-production-748b4.up.railway.app",
+    "https://sooqtj-lang.github.io",
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=_ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Init-Data", "X-User-Id"],
 )
 
 ADMIN_ID = int(os.getenv("ADMIN_ID", "7555325054"))
@@ -105,7 +114,7 @@ def require_admin_or_partner(user=Depends(get_current_user)):
     return user
 
 
-WEBAPP_URL  = "https://sooqtj-lang.github.io/sooqtj-bot"  # hardcoded — bypass stale env
+WEBAPP_URL  = os.getenv("WEBAPP_URL", "https://web-production-748b4.up.railway.app")
 BACKEND_URL = "https://web-production-748b4.up.railway.app"
 
 STATUS_MESSAGES = {
@@ -145,20 +154,26 @@ def health():
     try:
         sheets.ensure_connected()
         status["sheets"] = True
-    except Exception as e:
-        status["sheets_error"] = str(e)
+    except Exception:
+        status["sheets"] = False
     try:
         db._conn()
         status["db"] = db._pg_ok
-    except Exception as e:
-        status["db_error"] = str(e)
+    except Exception:
+        status["db"] = False
     return status
 
 
 # ─── WEBHOOK ────────────────────────────────────────────────
 
+_WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "")
+
 @app.post("/webhook")
-async def webhook(update: dict):
+async def webhook(update: dict, request: Request):
+    if _WEBHOOK_SECRET:
+        token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
+        if token != _WEBHOOK_SECRET:
+            raise HTTPException(status_code=403, detail="Invalid webhook token")
     update_obj = telebot.types.Update.de_json(json.dumps(update))
     bot.process_new_updates([update_obj])
     return {"ok": True}
@@ -171,10 +186,8 @@ def me(user=Depends(get_current_user)):
     return user
 
 @app.get("/api/role")
-def get_role_endpoint(user_id: int):
-    role = auth.get_role(user_id)
-    print(f"[role] user_id={user_id} → {role}")
-    return {"role": role, "user_id": user_id}
+def get_role_endpoint(user=Depends(get_current_user)):
+    return {"role": user["role"], "user_id": user["id"]}
 
 
 @app.post("/api/_admin/setup-bot")
