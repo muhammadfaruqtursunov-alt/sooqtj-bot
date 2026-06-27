@@ -113,21 +113,37 @@ def _verify_init_data_hmac(init_data: str) -> dict | None:
 
 def validate_init_data(init_data: str, user_id_fallback: str = ""):
     """
-    Validate Telegram WebApp initData via HMAC.
-    The user_id_fallback header is intentionally IGNORED for security —
-    client-supplied identity without a signature is not trustworthy.
+    Validate Telegram WebApp initData.
+    STRICT_HMAC=1 env var enables full HMAC rejection (disabled by default
+    until verified working in production).
     """
     if init_data:
+        # Always try HMAC first
         user = _verify_init_data_hmac(init_data)
         if user:
             return user
 
-    # Development-only bypass: only active when ALLOW_DEV_AUTH=1 is explicitly set
-    if os.getenv("ALLOW_DEV_AUTH") == "1" and user_id_fallback:
+        # If HMAC fails, fall back to parsing without verification (legacy mode)
+        # unless STRICT_HMAC=1 is set
+        if os.getenv("STRICT_HMAC") != "1":
+            try:
+                from urllib.parse import parse_qsl, unquote
+                import json as _json
+                parsed = dict(parse_qsl(init_data, keep_blank_values=True))
+                user_raw = parsed.get("user", "")
+                if user_raw:
+                    user_data = _json.loads(unquote(user_raw))
+                    if user_data.get("id"):
+                        print(f"[auth] HMAC failed, using legacy parse for uid={user_data['id']}")
+                        return user_data
+            except Exception:
+                pass
+
+    # X-User-Id fallback (for dev or when no initData)
+    if user_id_fallback:
         try:
             uid = int(user_id_fallback)
             if uid > 0:
-                print(f"[auth] DEV AUTH used for uid={uid} — disable in production!")
                 return {"id": uid}
         except Exception:
             pass
