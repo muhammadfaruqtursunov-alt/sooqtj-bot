@@ -186,8 +186,22 @@ def me(user=Depends(get_current_user)):
     return user
 
 @app.get("/api/role")
-def get_role_endpoint(user=Depends(get_current_user)):
-    return {"role": user["role"], "user_id": user["id"]}
+def get_role_endpoint(request: Request, user_id: int = 0):
+    # Accept user_id from query param (legacy) or x-user-id header
+    uid = user_id or 0
+    if not uid:
+        try:
+            uid = int(request.headers.get("x-user-id", "0"))
+        except Exception:
+            uid = 0
+    # Try to get from initData
+    if not uid:
+        init_data = request.headers.get("x-init-data", "")
+        user = auth.validate_init_data(init_data, "")
+        if user:
+            uid = user["id"]
+    role = auth.get_role(uid) if uid else "client"
+    return {"role": role, "user_id": uid}
 
 
 @app.post("/api/_admin/setup-bot")
