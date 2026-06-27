@@ -94,7 +94,13 @@ function AppInner() {
     }
 
     try {
-      const r = await fetch(`${BASE}/api/role?user_id=${uid}`)
+      const initDataRaw = window.Telegram?.WebApp?.initData || ''
+      const r = await fetch(`${BASE}/api/role`, {
+        headers: {
+          'x-init-data': initDataRaw,
+          'x-user-id': String(uid),
+        },
+      })
       const d = await r.json()
       const apiRole = d.role || 'client'
       setRealRole(apiRole)
